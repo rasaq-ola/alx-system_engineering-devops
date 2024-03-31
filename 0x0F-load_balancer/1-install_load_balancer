@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# This script installs and configures HAproxy on a new Ubuntu machine to distribute traffic to web-01 and web-02
+
+# Install HAproxy
+sudo apt-get update
+sudo apt-get install -y haproxy
+
+# Configure HAproxy
+sudo sed -i 's/^\(frontend.*\)/\1\n    mode http\n    default_backend webservers/' /etc/haproxy/haproxy.cfg
+sudo sed -i '/backend webservers/,/^$/d' /etc/haproxy/haproxy.cfg
+sudo bash -c 'echo "    server web-01 54.158.193.5:80 check" >> /etc/haproxy/haproxy.cfg'
+sudo bash -c 'echo "    server web-02 54.160.127.64:80 check" >> /etc/haproxy/haproxy.cfg'
+
+# Restart HAproxy
+sudo systemctl restart haproxy
+
