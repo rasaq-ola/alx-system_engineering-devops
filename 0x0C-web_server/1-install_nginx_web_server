@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# This script installs and configures Nginx web server on Ubuntu
+
+# Install nginx with '-y' to automatically answer yes to prompts
+apt-get update
+apt-get install -y nginx
+
+# Configure nginx to listen on port 80
+sed -i 's/80 default_server/80 default_server;/g' /etc/nginx/sites-available/default
+
+# Restart nginx
+service nginx restart
+
+# Create a test HTML page
+echo "Hello World!" > /var/www/html/index.html
