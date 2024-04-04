@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# This script configures Apache to return a page containing "Hello Holberton"
+
+# Install Apache
+apt-get update
+apt-get install -y apache2
+
+# Start Apache service
+service apache2 start
+
+# Create HTML file with "Hello Holberton"
+echo "<!DOCTYPE html>" > /var/www/html/index.html
+echo "<html>" >> /var/www/html/index.html
+echo "<head>" >> /var/www/html/index.html
+echo "<title>Hello Holberton</title>" >> /var/www/html/index.html
+echo "</head>" >> /var/www/html/index.html
+echo "<body>" >> /var/www/html/index.html
+echo "<h1>Hello Holberton</h1>" >> /var/www/html/index.html
+echo "</body>" >> /var/www/html/index.html
+echo "</html>" >> /var/www/html/index.html
