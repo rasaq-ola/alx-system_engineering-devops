@@ -9,12 +9,14 @@ apt-get install -y apache2
 service apache2 start
 
 # Create HTML file with "Hello Holberton"
-echo "<!DOCTYPE html>" > /var/www/html/index.html
-{ echo "<html>"; } >> /var/www/html/index.html
-echo "<head>" >> /var/www/html/index.html
-echo "<title>Hello Holberton</title>" >> /var/www/html/index.html
-echo "</head>" >> /var/www/html/index.html
-echo "<body>" >> /var/www/html/index.html
-echo "<h1>Hello Holberton</h1>" >> /var/www/html/index.html
-echo "</body>" >> /var/www/html/index.html
-echo "</html>" >> /var/www/html/index.html
+{ 
+  echo "<!DOCTYPE html>"
+  echo "<html>"
+  echo "<head>"
+  echo "<title>Hello Holberton</title>"
+  echo "</head>"
+  echo "<body>"
+  echo "<h1>Hello Holberton</h1>"
+  echo "</body>"
+  echo "</html>"
+} > /var/www/html/index.html
