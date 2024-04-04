@@ -10,7 +10,7 @@ service apache2 start
 
 # Create HTML file with "Hello Holberton"
 echo "<!DOCTYPE html>" > /var/www/html/index.html
-echo "<html>" >> /var/www/html/index.html
+{ echo "<html>"; } >> /var/www/html/index.html
 echo "<head>" >> /var/www/html/index.html
 echo "<title>Hello Holberton</title>" >> /var/www/html/index.html
 echo "</head>" >> /var/www/html/index.html
