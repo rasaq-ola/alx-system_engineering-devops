@@ -1,15 +1,4 @@
 #!/usr/bin/env bash
-# Configure Nginx to return "Hello Holberton" on port 80
-
-echo "server {
-    listen 80;
-    listen [::]:80;
-
-    server_name _;
-
-    location / {
-        return 200 'Hello Holberton\n';
-    }
-}" > /etc/nginx/sites-available/default
-
+# Short Bash script to fix Nginx not listening on port 80
+sed -i 's/listen 80 default_server/listen 80/g' /etc/nginx/sites-available/default
 service nginx restart
