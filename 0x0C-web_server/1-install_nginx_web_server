@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# This script installs nginx and sets up a custom home page
+
+# Update package list and install nginx
+sudo apt-get update
+sudo apt-get install -y nginx
+
+# Create a custom index.html with "Hello World!" content
+echo "Hello World!" | sudo tee /var/www/html/index.html
+
+# Restart nginx without using systemctl
+sudo service nginx restart
