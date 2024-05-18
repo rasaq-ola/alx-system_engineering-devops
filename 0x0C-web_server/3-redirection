@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# This script installs nginx and configures a 301 redirection
+
+# Update package list and install nginx
+sudo apt-get update
+sudo apt-get install -y nginx
+
+# Create a configuration file for the default site with redirection
+sudo tee /etc/nginx/sites-available/default > /dev/null << 'EOF'
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    
+    server_name _;
+
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+EOF
+
+# Check nginx configuration for syntax errors
+sudo nginx -t
+
+# Restart nginx service to apply the changes
+sudo service nginx restart
