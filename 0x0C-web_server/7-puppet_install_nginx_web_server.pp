@@ -1,5 +1,5 @@
 # 7-puppet_install_nginx_web_server.pp
-# This Puppet manifest installs nginx and configures a custom page and a 301 redirect
+# This Puppet manifest installs nginx and configures a custom page, a 301 redirect, and a custom 404 page
 
 # Ensure the package 'nginx' is installed
 package { 'nginx':
@@ -13,7 +13,7 @@ service { 'nginx':
   require   => Package['nginx'],
 }
 
-# Define the content of the custom 404 page
+# Define the content of the custom root page
 file { '/var/www/html/index.html':
   ensure  => file,
   content => 'Hello World!',
@@ -37,9 +37,11 @@ server {
 
     server_name _;
 
+    root /var/www/html;
+    index index.html;
+
     location / {
-        root /var/www/html;
-        index index.html index.htm;
+        try_files \$uri \$uri/ =404;
     }
 
     location /redirect_me {
