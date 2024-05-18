@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# 3-redirection
 # This script installs nginx and configures a 301 redirection
 
 # Update package list and install nginx
