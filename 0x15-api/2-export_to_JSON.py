@@ -1,30 +1,37 @@
 #!/usr/bin/python3
+"""
+Python script to export data in the JSON format.
+"""
 import json
 import requests
 import sys
 
-def export_to_json(employee_id):
-    user_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
-    todos_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos"
+if __name__ == "__main__":
+    employee_id = sys.argv[1]
+    user_url = (
+        f"https://jsonplaceholder.typicode.com/users/{employee_id}"
+    )
+    todos_url = (
+        f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos"
+    )
 
     user_response = requests.get(user_url)
+    user_data = user_response.json()
+    username = user_data.get("username")
+
     todos_response = requests.get(todos_url)
+    todos_data = todos_response.json()
 
-    user = user_response.json()
-    todos = todos_response.json()
+    tasks = [
+        {
+            "task": task.get("title"),
+            "completed": task.get("completed"),
+            "username": username
+        }
+        for task in todos_data
+    ]
 
-    username = user.get('username')
+    json_data = {employee_id: tasks}
 
-    tasks = [{"task": task.get('title'), "completed": task.get('completed'), "username": username} for task in todos]
-
-    data = {employee_id: tasks}
-    filename = f"{employee_id}.json"
-    with open(filename, mode='w') as file:
-        json.dump(data, file)
-
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: ./2-export_to_JSON.py <employee_id>")
-    else:
-        employee_id = int(sys.argv[1])
-        export_to_json(employee_id)
+    with open(f"{employee_id}.json", "w") as json_file:
+        json.dump(json_data, json_file)
