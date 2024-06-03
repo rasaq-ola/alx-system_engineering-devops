@@ -1,27 +1,37 @@
 #!/usr/bin/python3
+"""
+Python script to export data in the JSON format.
+"""
 import json
 import requests
+from sys import argv
 
-def export_all_to_json():
+if __name__ == "__main__":
     users_url = "https://jsonplaceholder.typicode.com/users"
     todos_url = "https://jsonplaceholder.typicode.com/todos"
 
     users_response = requests.get(users_url)
     todos_response = requests.get(todos_url)
 
-    users = users_response.json()
-    todos = todos_response.json()
+    users_data = users_response.json()
+    todos_data = todos_response.json()
 
-    data = {}
-    for user in users:
-        user_id = user.get('id')
-        username = user.get('username')
-        user_tasks = [{"username": username, "task": task.get('title'), "completed": task.get('completed')} for task in todos if task.get('userId') == user_id]
-        data[user_id] = user_tasks
+    user_dict = {}
+    for user in users_data:
+        user_id = user["id"]
+        user_dict[user_id] = []
 
-    filename = "todo_all_employees.json"
-    with open(filename, mode='w') as file:
-        json.dump(data, file)
+    for todo in todos_data:
+        task = {"username": "", "task": "", "completed": ""}
+        task["task"] = todo["title"]
+        task["completed"] = todo["completed"]
 
-if __name__ == "__main__":
-    export_all_to_json()
+        user_id = todo["userId"]
+        task["username"] = next(
+            user["username"] for user in users_data if user["id"] == user_id
+        )
+
+        user_dict[user_id].append(task)
+
+    with open("todo_all_employees.json", "w") as json_file:
+        json.dump(user_dict, json_file)
