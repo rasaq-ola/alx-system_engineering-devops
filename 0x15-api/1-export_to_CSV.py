@@ -1,35 +1,30 @@
 #!/usr/bin/python3
 """
-Script to fetch TODO list progress for a given employee ID and export to CSV
+Python script to export data in the CSV format.
 """
-
 import csv
 import requests
 import sys
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: {} EMPLOYEE_ID".format(sys.argv[0]))
-        sys.exit(1)
-
-    employee_id = int(sys.argv[1])
-
-    user_url = "https://jsonplaceholder.typicode.com/users/{}".format(employee_id)
-    todos_url = "https://jsonplaceholder.typicode.com/users/{}/todos".format(employee_id)
+    employee_id = sys.argv[1]
+    user_url = (
+        f"https://jsonplaceholder.typicode.com/users/{employee_id}"
+    )
+    tasks_url = (
+        f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos"
+    )
 
     user_response = requests.get(user_url)
-    todos_response = requests.get(todos_url)
-
-    if user_response.status_code != 200 or todos_response.status_code != 200:
-        print("Error fetching data")
-        sys.exit(1)
-
     user_data = user_response.json()
-    todos_data = todos_response.json()
+    employee_username = user_data.get("username")
 
-    username = user_data.get('username')
+    tasks_response = requests.get(tasks_url)
+    tasks_data = tasks_response.json()
 
-    with open('{}.csv'.format(employee_id), mode='w', newline='') as file:
-        writer = csv.writer(file, quoting=csv.QUOTE_ALL)
-        for task in todos_data:
-            writer.writerow([employee_id, username, task.get('completed'), task.get('title')])
+    csv_filename = f"{employee_id}.csv"
+    with open(csv_filename, mode='w', newline='') as csv_file:
+        csv_writer = csv.writer(csv_file, quoting=csv.QUOTE_ALL)
+        for task in tasks_data:
+            csv_writer.writerow([employee_id, employee_username,
+                                 task.get("completed"), task.get("title")])
