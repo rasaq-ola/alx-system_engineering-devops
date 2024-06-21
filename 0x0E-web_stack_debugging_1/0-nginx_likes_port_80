@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# This script fixes Nginx not listening on port 80 issue
+
+# Install net-tools if not already installed (to use netstat command)
+apt-get update
+apt-get install -y net-tools
+
+# Check if Nginx is listening on port 80
+if ! netstat -tuln | grep ':80\s' > /dev/null; then
+    sed -i 's/^\s*listen\s*\(.*\);$/\tlisten 80;/' /etc/nginx/sites-available/default
+fi
+
+# Restart Nginx to apply changes
+service nginx restart
