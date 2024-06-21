@@ -6,9 +6,14 @@ apt-get update
 apt-get install -y net-tools
 
 # Check if Nginx is listening on port 80
-if ! netstat -tuln | grep ':80\s' > /dev/null; then
+netstat -tuln | grep ':80\s'
+if [ $? -ne 0 ]; then
     sed -i 's/^\s*listen\s*\(.*\);$/\tlisten 80;/' /etc/nginx/sites-available/default
 fi
 
 # Restart Nginx to apply changes
 service nginx restart
+
+# Verify Nginx is running and serving on port 80
+sleep 2
+curl -sI 127.0.0.1 | head -n 1 | grep "200 OK"
