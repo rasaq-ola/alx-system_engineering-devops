@@ -1,16 +1,19 @@
 #!/usr/bin/env bash
-# fix a web server to run as the nginx user listening on port 8080
+# Fixes a web server to run Nginx as user listening on all IPs on port 8080.
 
-#start nginx and check which user is's running as
-service nginx start
-cat /etc/nginx/nginx.conf
+# Modify Nginx configuration
+nginx_conf="/etc/nginx/nginx.conf"
+sed -i "s/#user www-data/user nginx/" "$nginx_conf"
 
-# replace user and listening port in nginx.conf
-sed -i "s/#user www-data;/user nginx;/" /etc/nginx/nginx.conf
-sed -i "s/80/8080/" /etc/nginx/sites-available/default
-# change file permission so owner cand read configurations
-chmod 644 /etc/nginx/nginx.conf
-# kill apache, its interfering with nginx server
-plill apache2
-# start server as ngicx
+# Change the default HTTP port
+default_site_conf="/etc/nginx/sites-available/default"
+sed -i "s/80/8080/g" "$default_site_conf"
+
+# Set restrictive permissions on the nginx.conf file
+chmod 644 "$nginx_conf"
+
+# Stop Apache if it's running
+pkill apache2
+
+# Start Nginx as the nginx user
 sudo -u nginx service nginx start
