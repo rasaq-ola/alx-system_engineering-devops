@@ -1,25 +1,4 @@
 #!/usr/bin/env bash
 # runs the 'whoami' command as another user
 
-# Check if the user parameter is passed
-if [ -z "$1" ]; then
-  echo "No user specified"
-  exit 1
-fi
-
-# Check if the user exists
-if ! id -u "$1" >/dev/null 2>&1; then
-  echo "User $1 does not exist"
-  exit 1
-fi
-
-# Run 'whoami' as the specified user and capture the output
-output=$(sudo -u "$1" whoami 2>/dev/null)
-
-# Check if the 'sudo' command was successful
-if [ $? -eq 0 ]; then
-  echo "$output"
-else
-  echo "Failed to switch user or run whoami"
-  exit 1
-fi
+sudo -u "$1" whoami
